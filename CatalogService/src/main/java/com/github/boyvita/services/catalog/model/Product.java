@@ -26,10 +26,14 @@ public class Product implements Serializable {
     @Column(name = "description")
     private String description;
 
-    public Product(String name, Double cost, String description) {
+    @Column(name = "quantity")
+    private Integer quantity;
+
+    public Product(String name, Double cost, String description, Integer quantity) {
         this.name = name;
         this.cost = cost;
         this.description = description;
+	this.quantity = quantity;
     }
 
     public Product() {
@@ -57,5 +61,13 @@ public class Product implements Serializable {
 
     public void setCost(Double cost) {
         this.cost = cost;
+    }
+
+    public Integer getQuantity() {
+    	return quantity;
+    }
+
+    public void SetQuantity(Integer quantity) {
+    	this.quantity = quantity;
     }
 }

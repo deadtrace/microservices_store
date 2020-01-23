@@ -17,24 +17,23 @@ public class Item implements Serializable  {
     @GeneratedValue(strategy=GenerationType.AUTO)
     private Long id;
 
-    @Enumerated(EnumType.ORDINAL)
-    private ItemStatus itemStatus;
-
+    @Column(name="quantity")
+    private Integer itemQuantity;
 
     @Column(name="order_id")
     private Long orderId;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "product_id", nullable=false)
-    private Product product;
+    @Column(name="product_id")
+    private Long productId;
 
-    public Item(Product product) {
-        this.product = product;
-        this.itemStatus = ItemStatus.CONFIRMING;
+    public Item(Long productId, Long orderId) {
+        this.productId = productId;
+	this.orderId = orderId;
+        this.itemQuantity = 1;
     }
 
     public Item() {
-        this.itemStatus = ItemStatus.CONFIRMING;
+        this.itemQuantity = 1;
     }
 
     public Long getId() {
@@ -45,12 +44,12 @@ public class Item implements Serializable  {
         this.id = id;
     }
 
-    public ItemStatus getItemStatus() {
-        return itemStatus;
+    public Integer getItemQuantity() {
+        return itemQuantity;
     }
 
-    public void setItemStatus(ItemStatus itemStatus) {
-        this.itemStatus = itemStatus;
+    public void setItemQuantity(Integer itemQuantity) {
+        this.itemQuantity = itemQuantity;
     }
 
     public Long getOrderId() {
@@ -61,11 +60,11 @@ public class Item implements Serializable  {
         this.orderId = orderId;
     }
 
-    public Product getProduct() {
-        return product;
+    public Long getProductId() {
+        return productId;
     }
 
-    public void setProduct(Product product) {
-        this.product = product;
+    public void setProductId(Long productId) {
+        this.productId = productId;
     }
 }

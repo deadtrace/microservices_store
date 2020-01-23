@@ -9,21 +9,22 @@ CREATE TABLE catalog.product
     cost double precision,
     description character varying(255) COLLATE pg_catalog."default" NOT NULL,
     name character varying(255) COLLATE pg_catalog."default",
+    quantity integer,
     CONSTRAINT product_pkey PRIMARY KEY (product_id)
-)
+);
 TABLESPACE pg_default;
 ALTER TABLE catalog.product OWNER to postgres;
-INSERT INTO catalog.product(product_id, cost, description, name) 
+INSERT INTO catalog.product(product_id, cost, description, name, quantity) 
 VALUES
-	(1, 1.5, 'King size', 'Cookie King'),
-	(2, 3, 'Forgives you', 'Cookie God'),
-	(3, 5, 'Mom size', 'Cookie Universe');
+	(1, 1.5, 'King size', 'Cookie King', 3),
+	(2, 3, 'Forgives you', 'Cookie God', 3),
+	(3, 5, 'Mom size', 'Cookie Universe', 3);
 
 -- ITEM
 CREATE TABLE catalog.item
 (
     item_id bigint NOT NULL,
-    item_status integer,
+    quantity integer,
     order_id bigint,
     product_id bigint NOT NULL,
     CONSTRAINT item_pkey PRIMARY KEY (item_id),
@@ -32,14 +33,14 @@ CREATE TABLE catalog.item
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
         NOT VALID
-)
+);
 TABLESPACE pg_default;
 ALTER TABLE catalog.item OWNER to postgres;
-INSERT INTO catalog.item(item_id, item_status, order_id, product_id) VALUES 
-	(1, 0, 1, 1),
-	(2, 0, 2, 2),
-	(3, 0, 3, 2),
-	(4, 0, 3, 3);
+INSERT INTO catalog.item(item_id, quantity, order_id, product_id) VALUES 
+	(1, 1, 1, 1),
+	(2, 1, 2, 2),
+	(3, 1, 3, 2),
+	(4, 1, 3, 3);
 
 
 
@@ -53,7 +54,7 @@ CREATE TABLE accounting.client
     client_id bigint NOT NULL,
     name character varying(255) COLLATE pg_catalog."default",
     CONSTRAINT client_pkey PRIMARY KEY (client_id)
-)
+);
 TABLESPACE pg_default;
 ALTER TABLE accounting.client OWNER to postgres;
 INSERT INTO accounting.client(client_id, name) VALUES 
@@ -72,7 +73,7 @@ CREATE TABLE accounting."order"
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
         NOT VALID
-)
+);
 TABLESPACE pg_default;
 ALTER TABLE accounting."order" OWNER to postgres;
 INSERT INTO accounting."order"(order_id, order_status, client_id) VALUES 
