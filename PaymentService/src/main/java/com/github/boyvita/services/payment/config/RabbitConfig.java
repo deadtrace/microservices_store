@@ -20,17 +20,14 @@ public class RabbitConfig {
 	@Value("${rabbit.rabbitmq.queueAccount}")
 	String accountQueue;
 
-
 	@Value("${rabbit.rabbitmq.queueCatalog}")
 	String catalogQueue;
-
 
 	@Value("${rabbit.rabbitmq.exchange}")
     String exchange;
 
 	@Value("${rabbit.rabbitmq.routingKeyAccount}")
 	private String accountingKey;
-
 
 	@Value("${rabbit.rabbitmq.routingKeyCatalog}")
 	private String catalogKey;

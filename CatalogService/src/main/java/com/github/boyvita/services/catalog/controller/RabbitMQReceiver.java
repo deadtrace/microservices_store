@@ -1,7 +1,6 @@
 package com.github.boyvita.services.catalog.controller;
 
 import com.github.boyvita.services.catalog.model.Item;
-import com.github.boyvita.services.catalog.model.ItemStatus;
 import com.github.boyvita.services.catalog.repo.ItemRepository;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -38,7 +37,6 @@ public class RabbitMQReceiver {
     public void receivePaidOrder(Long orderId) {
         for (Item it: itemRepository.findAll()){
             if (it.getOrderId() == orderId) {
-                it.setItemStatus(ItemStatus.COOKING);
                 itemRepository.save(it);
             }
         }

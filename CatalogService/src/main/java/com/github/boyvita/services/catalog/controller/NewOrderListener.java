@@ -1,5 +1,6 @@
 package com.github.boyvita.services.accounting.controller;
 
+import com.github.boyvita.services.catalog.controller.ItemMessage;
 import com.github.boyvita.services.catalog.model.Item;
 import com.github.boyvita.services.catalog.model.Product;
 import com.github.boyvita.services.catalog.repo.ItemRepository;
@@ -19,7 +20,8 @@ import org.springframework.amqp.core.Message;
 @ComponentScan(basePackages = "com.github.boyvita.services.catalog")
 public class NewOrderListener {
 
-    private final RabbitTemplate amqpTemplateReceiver;
+    @Autowired
+    private RabbitTemplate amqpTemplateReceiver;
 
     @Value("${rabbit.rabbitmq.queueAccount}")
     private String queue;
@@ -29,14 +31,12 @@ public class NewOrderListener {
 
     @Autowired
     private ItemRepository itemRepository;
+
+    @Autowired
     private ProductRepository productRepository;
 
-    public RabbitMQReceiver(RabbitTemplate amqpTemplateReceiver ) {
-        this.amqpTemplateReceiver = amqpTemplateReceiver;
-    }
-
-    @RabbitListener(queues = "${rabbit.rabbitmq.queueAccount}")
-    public void receiveMessage(final ItemMessage itemMessage) {
-        log.info("Received message as specific class: {}", itemMessage.toString());
+    @RabbitListener(queues = "${rabbit.rabbitmq.queueCatalog}")
+    public void receiveMessage(ItemMessage itemMessage) {
+        System.out.println(itemMessage.toString());
     }
 }

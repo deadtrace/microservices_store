@@ -19,13 +19,13 @@ import org.springframework.context.annotation.Configuration;
 @EnableRabbit
 public class RabbitConfig {
 
-	@Value("${rabbit.rabbitmq.queueAccount}")
+	@Value("${rabbit.rabbitmq.queueCatalog}")
 	String accountQueue;
 
 	@Value("${rabbit.rabbitmq.exchange}")
 	String exchange;
 
-	@Value("${rabbit.rabbitmq.routingKeyAccount}")
+	@Value("${rabbit.rabbitmq.routingKeyCatalog}")
 	private String routingkey;
 
 	@Bean
