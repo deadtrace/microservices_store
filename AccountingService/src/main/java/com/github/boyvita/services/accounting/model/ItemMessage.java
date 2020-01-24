@@ -4,13 +4,13 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.io.Serializable;
 
-public final class CustomMessage implements Serializable {
+public final class ItemMessage implements Serializable {
 
     private final long orderId;
     private final int quantity;
     private final long productId;
 
-    public CustomMessage(@JsonProperty("orderId") long orderId,
+    public ItemMessage(@JsonProperty("orderId") long orderId,
                          @JsonProperty("quantity") int quantity,
                          @JsonProperty("productId") long productId) {
         this.orderId = orderId;
@@ -32,7 +32,7 @@ public final class CustomMessage implements Serializable {
 
     @Override
     public String toString() {
-        return "CustomMessage{" +
+        return "ItemMessage{" +
                 "orderId='" + orderId + '\'' +
                 ", quantity=" + quantity +
                 ", productId=" + productId +
