@@ -17,24 +17,29 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class RabbitConfig {
 
-	@Value("${rabbit.rabbitmq.queueAccount}")
-	String accountQueue;
-
-	@Value("${rabbit.rabbitmq.queueCatalog}")
-	String catalogQueue;
-
 	@Value("${rabbit.rabbitmq.exchange}")
-    String exchange;
+	private String exchange;
 
-	@Value("${rabbit.rabbitmq.routingKeyAccount}")
-	private String accountingKey;
+	@Value("${rabbit.rabbitmq.accountingQueue}")
+	private String accountingQueue;
 
-	@Value("${rabbit.rabbitmq.routingKeyCatalog}")
-	private String catalogKey;
+	@Value("${rabbit.rabbitmq.catalogQueue}")
+	private String catalogQueue;
+
+	@Value("${rabbit.rabbitmq.confirmationKey}")
+	private String confirmationKey;
+
+	@Value("${rabbit.rabbitmq.cancellingKey}")
+	private String cancellingKey;
 
 	@Bean
-	Queue accQueue() {
-		return new Queue(accountQueue, false);
+	DirectExchange exchange() {
+		return new DirectExchange(exchange);
+	}
+
+	@Bean
+	Queue accountingQueue() {
+		return new Queue(accountingQueue, false);
 	}
 
 	@Bean
@@ -43,18 +48,18 @@ public class RabbitConfig {
 	}
 
 	@Bean
-	DirectExchange exchange() {
-		return new DirectExchange(exchange);
+	Binding confirmationBinding(Queue accountingQueue, DirectExchange exchange) {
+		return BindingBuilder.bind(accountingQueue).to(exchange).with(confirmationKey);
 	}
 
 	@Bean
-	Binding accountServiceBinding(Queue accQueue, DirectExchange exchange) {
-		return BindingBuilder.bind(accQueue).to(exchange).with(accountingKey);
+	Binding cancellingCatalogBinding(Queue catalogQueue, DirectExchange exchange) {
+		return BindingBuilder.bind(catalogQueue).to(exchange).with(cancellingKey);
 	}
 
 	@Bean
-	Binding catalogServiceBinding(Queue catalogQueue, DirectExchange exchange) {
-		return BindingBuilder.bind(catalogQueue).to(exchange).with(catalogKey);
+	Binding cancellingAccountingBinding(Queue accountingQueue, DirectExchange exchange) {
+		return BindingBuilder.bind(accountingQueue).to(exchange).with(cancellingKey);
 	}
 
 	@Bean

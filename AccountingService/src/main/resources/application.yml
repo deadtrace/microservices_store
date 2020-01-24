@@ -30,10 +30,10 @@ rabbit:
     username: guest
     password: guest
     exchange: rabbit.exchange
-    queueAccount: rabbit.AccountingQueue
-    queueCatalog: rabbit.CatalogQueue
-    routingKeyAccount: rabbit.AccRoute
-    routingKeyCatalog: rabbit.CatalogRoute
+    accountingQueue: rabbit.accountingQueue
+    catalogQueue: rabbit.catalogQueue
+    confirmationKey: rabbit.confirmationKey
+    cancellingKey: rabbit.cancellingKey
 
 eureka:
   client:

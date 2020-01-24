@@ -1,4 +1,4 @@
-package com.github.boyvita.services.catalog.controller;
+package com.github.boyvita.services.catalog.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

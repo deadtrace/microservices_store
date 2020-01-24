@@ -1,5 +1,6 @@
 package com.github.boyvita.services.payment.controller;
 
+import com.github.boyvita.services.payment.model.PaymentInfo;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -15,16 +16,17 @@ public class RabbitMQSender {
 	@Value("${rabbit.rabbitmq.exchange}")
 	private String exchange;
 	
-	@Value("${rabbit.rabbitmq.routingKeyAccount}")
-	private String routingKeyAccount;
+	@Value("${rabbit.rabbitmq.cancellingKey}")
+	private String cancellingKey;
 
-	@Value("${rabbit.rabbitmq.routingKeyCatalog}")
-	private String routingKeyCatalog;
+	@Value("${rabbit.rabbitmq.confirmationKey}")
+	private String confirmationKey;
 
 
-	public void send(Long orderId) {
-		rabbitTemplate.convertAndSend(exchange, routingKeyAccount, orderId);
-		rabbitTemplate.convertAndSend(exchange, routingKeyCatalog, orderId);
-		System.out.println("Send msg = " + orderId);
+	public void sendConfirmation(Long orderId) {
+		rabbitTemplate.convertAndSend(exchange, confirmationKey, new PaymentInfo(new Boolean(true), orderId));
+	}
+	public void sendCancelling(Long orderId) {
+		rabbitTemplate.convertAndSend(exchange, cancellingKey, new PaymentInfo(new Boolean(false), orderId));
 	}
 }

@@ -17,19 +17,21 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class RabbitConfig {
 
-	@Value("${rabbit.rabbitmq.queueCatalog}")
-    String queueCatalog;
 
 	@Value("${rabbit.rabbitmq.exchange}")
-    String exchange;
+	private String exchange;
 
-	@Value("${rabbit.rabbitmq.routingKeyCatalog}")
-	private String routingKeyCatalog;
+	@Value("${rabbit.rabbitmq.accountingQueue}")
+	private String accountingQueue;
 
-	@Bean
-	Queue catalogQueue() {
-		return new Queue(queueCatalog, false);
-	}
+	@Value("${rabbit.rabbitmq.catalogQueue}")
+	private String catalogQueue;
+
+	@Value("${rabbit.rabbitmq.confirmationKey}")
+	private String confirmationKey;
+
+	@Value("${rabbit.rabbitmq.cancellingKey}")
+	private String cancellingKey;
 
 	@Bean
 	DirectExchange exchange() {
@@ -37,8 +39,28 @@ public class RabbitConfig {
 	}
 
 	@Bean
-	Binding binding(Queue catalogQueue, DirectExchange exchange) {
-		return BindingBuilder.bind(catalogQueue).to(exchange).with(routingKeyCatalog);
+	Queue accountingQueue() {
+		return new Queue(accountingQueue, false);
+	}
+
+	@Bean
+	Queue catalogQueue() {
+		return new Queue(catalogQueue, false);
+	}
+
+	@Bean
+	Binding confirmationBinding(Queue accountingQueue, DirectExchange exchange) {
+		return BindingBuilder.bind(accountingQueue).to(exchange).with(confirmationKey);
+	}
+
+	@Bean
+	Binding cancellingCatalogBinding(Queue catalogQueue, DirectExchange exchange) {
+		return BindingBuilder.bind(catalogQueue).to(exchange).with(cancellingKey);
+	}
+
+	@Bean
+	Binding cancellingAccountingBinding(Queue accountingQueue, DirectExchange exchange) {
+		return BindingBuilder.bind(accountingQueue).to(exchange).with(cancellingKey);
 	}
 
 	@Bean
@@ -52,6 +74,4 @@ public class RabbitConfig {
 		rabbitTemplate.setMessageConverter(jsonMessageConverter());
 		return rabbitTemplate;
 	}
-
-
 }

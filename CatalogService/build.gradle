@@ -26,6 +26,8 @@ dependencies {
     implementation('org.springframework.amqp:spring-rabbit')
 
     implementation('org.springframework.cloud:spring-cloud-starter-netflix-eureka-client')
+
+    implementation('org.json:json:20190722')
 }
 
 dependencyManagement {

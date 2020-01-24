@@ -1,7 +1,12 @@
 package com.github.boyvita.services.catalog.controller;
 
+import com.github.boyvita.services.catalog.exception.NoEntityException;
 import com.github.boyvita.services.catalog.model.Item;
+import com.github.boyvita.services.catalog.model.PaymentInfo;
+import com.github.boyvita.services.catalog.model.Product;
 import com.github.boyvita.services.catalog.repo.ItemRepository;
+import com.github.boyvita.services.catalog.repo.ProductRepository;
+import javafx.util.Pair;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,31 +21,26 @@ import org.springframework.stereotype.Service;
 @Component
 @ComponentScan(basePackages = "com.github.boyvita.services.catalog")
 public class RabbitMQReceiver {
+    @Autowired
+    private ProductRepository productRepository;
+    @Autowired
+    private ItemRepository itemRepository;
 
     @Autowired
     private RabbitTemplate amqpTemplateReceiver;
 
-    @Value("${rabbit.rabbitmq.queueCatalog}")
-    private String queue;
-
-    @Value("${rabbit.rabbitmq.routingKeyCatalog}")
-    private String routingkey;
-
-    @Autowired
-    private ItemRepository itemRepository;
-
-    public RabbitMQReceiver(ItemRepository itemRepository) {
-        this.itemRepository = itemRepository;
-    }
-
-    @RabbitListener(queues = "${rabbit.rabbitmq.queueCatalog}")
-    public void receivePaidOrder(Long orderId) {
+    @RabbitListener(queues = "${rabbit.rabbitmq.catalogQueue}")
+    public void receivePaymentInfo(PaymentInfo paymentInfo) throws NoEntityException {
+        Long orderId = paymentInfo.getOrderId();
+        System.out.println(orderId.toString());
         for (Item it: itemRepository.findAll()){
             if (it.getOrderId() == orderId) {
-                itemRepository.save(it);
+                Long productId = it.getOrderId();
+                Product product = productRepository.findById(productId).orElseThrow(() -> new NoEntityException(productId));
+                product.setQuantity(product.getQuantity() + it.getItemQuantity());
+                productRepository.save(product);
             }
         }
-        System.out.println("Received paid order id = " + orderId + " and extracted items from itemRepo");
+        System.out.println("canceled order" + orderId.toString());
     }
-
 }

@@ -29,6 +29,18 @@ public class Product implements Serializable {
     @Column(name = "quantity")
     private Integer quantity;
 
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setQuantity(Integer quantity) {
+        this.quantity = quantity;
+    }
+
     public Product(String name, Double cost, String description, Integer quantity) {
         this.name = name;
         this.cost = cost;

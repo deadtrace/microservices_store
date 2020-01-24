@@ -8,18 +8,18 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class NewOrderSender {
-
-    @Autowired
-    private RabbitTemplate rabbitTemplate;
-
-    @Value("${rabbit.rabbitmq.exchange}")
-    private String exchange;
-
-    @Value("${rabbit.rabbitmq.routingKeyAccount}")
-    private String routingKey;
-
-    public void send(Long orderId, Long quantity, Long productId) {
-        ItemMessage message = new ItemMessage(orderId, quantity, productId);
-        rabbitTemplate.convertAndSend(exchange, routingKey, message);
-    }
+//
+//    @Autowired
+//    private RabbitTemplate rabbitTemplate;
+//
+//    @Value("${rabbit.rabbitmq.exchange}")
+//    private String exchange;
+//
+//    @Value("${rabbit.rabbitmq.catalogOrderKey}")
+//    private String catalogOrderKey;
+//
+//    public void send(Long orderId, Long quantity, Long productId) {
+//        ItemMessage message = new ItemMessage(orderId, quantity, productId);
+//        rabbitTemplate.convertAndSend(exchange, catalogOrderKey, message);
+//    }
 }

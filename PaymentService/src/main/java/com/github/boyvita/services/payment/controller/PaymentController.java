@@ -1,17 +1,11 @@
 package com.github.boyvita.services.payment.controller;
 
 import com.netflix.discovery.EurekaClient;
-import org.hibernate.Hibernate;
-import org.springframework.beans.BeanUtils;
+import javafx.util.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Lazy;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @RestControllerAdvice
 @RequestMapping
@@ -25,10 +19,17 @@ public class PaymentController {
     @Lazy
     private EurekaClient eurekaClient;
 
-    @PostMapping
+    @PostMapping("/confirm")
     public Long payOrderById(@RequestBody Long orderId) {
-        rabbitMQSender.send(orderId);
+        rabbitMQSender.sendConfirmation(orderId);
         return orderId;
     }
+
+    @PostMapping("/cancel")
+    public Long cancelOrderById(@RequestBody Long orderId) {
+        rabbitMQSender.sendCancelling(orderId);
+        return orderId;
+    }
+
 
 }
