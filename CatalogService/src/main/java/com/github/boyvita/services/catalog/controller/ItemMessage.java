@@ -1,4 +1,4 @@
-package com.github.boyvita.services.accounting.model;
+package com.github.boyvita.services.catalog.controller;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -11,8 +11,8 @@ public final class ItemMessage implements Serializable {
     private final Long productId;
 
     public ItemMessage(@JsonProperty("orderId") Long orderId,
-                         @JsonProperty("quantity") Long quantity,
-                         @JsonProperty("productId") Long productId) {
+                       @JsonProperty("quantity") Long quantity,
+                       @JsonProperty("productId") Long productId) {
         this.orderId = orderId;
         this.quantity = quantity;
         this.productId = productId;

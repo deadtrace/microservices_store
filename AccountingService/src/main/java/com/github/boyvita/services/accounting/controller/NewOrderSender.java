@@ -1,6 +1,6 @@
 package com.github.boyvita.services.accounting.controller;    
 
-import com.github.boyvita.services.accounting.model.ItemMessage
+import com.github.boyvita.services.accounting.model.ItemMessage;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;    
 import org.springframework.beans.factory.annotation.Autowired;    
 import org.springframework.beans.factory.annotation.Value;    
@@ -9,14 +9,17 @@ import org.springframework.stereotype.Service;
 @Service
 public class NewOrderSender {
 
-    private final RabbitTemplate rabbitTemplate;
+    @Autowired
+    private RabbitTemplate rabbitTemplate;
 
-    public RabbitMQSender(final RabbitTemplate rabbitTemplate) {
-        this.rabbitTemplate = rabbitTemplate;
-    }
+    @Value("${rabbit.rabbitmq.exchange}")
+    private String exchange;
 
-    public void sendMessage(long orderId, int quantity, long productId) {
-        final var message = new ItemMessage(orderId, quantity, productId);
-        rabbitTemplate.convertAndSend(MessagingApplication.EXCHANGE_NAME, MessagingApplication.ROUTING_KEY, message);
+    @Value("${rabbit.rabbitmq.routingKeyAccount}")
+    private String routingKey;
+
+    public void send(Long orderId, Long quantity, Long productId) {
+        ItemMessage message = new ItemMessage(orderId, quantity, productId);
+        rabbitTemplate.convertAndSend(exchange, routingKey, message);
     }
 }

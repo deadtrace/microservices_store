@@ -6,7 +6,6 @@ import com.github.boyvita.services.accounting.model.OrderStatus;
 import com.github.boyvita.services.accounting.repo.OrderRepository;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.ComponentScan;
@@ -18,7 +17,7 @@ import org.springframework.stereotype.Service;
 @Component
 @ComponentScan(basePackages = "com.github.boyvita.services.accounting")
 public class RabbitMQReceiver {
-
+    @Autowired
     private final RabbitTemplate amqpTemplateReceiver;
 
     @Value("${rabbit.rabbitmq.queueAccount}")
@@ -30,7 +29,7 @@ public class RabbitMQReceiver {
     @Autowired
     private OrderRepository orderRepository;
 
-    public RabbitMQReceiver(RabbitTemplate amqpTemplateReceiver ) {
+    public RabbitMQReceiver(RabbitTemplate amqpTemplateReceiver) {
         this.amqpTemplateReceiver = amqpTemplateReceiver;
     }
 
