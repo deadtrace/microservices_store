@@ -96,6 +96,24 @@ public class AccountingController {
         return client;
     }
 
+    @GetMapping("/order/{id}/items")
+    public ResponseEntity<Object> getOrderItems(@PathVariable("id") Order order) throws IOException {
+        Long orderId = order.getOrderId();
+        String requestUrl = "http://localhost:8762/catalog/item";
+        JSONArray res = new JSONArray();
+        JSONArray json = readJsonArrayFromUrl(requestUrl);
+        System.out.println(json);
+        for (int i = 0; i < json.length(); i++) {
+            if (Objects.equals(orderId, json.getJSONObject(i).getLong("orderId"))) {
+                res.put(json.getJSONObject(i));
+            }
+        }
+
+        System.out.println(res.toString());
+        return new ResponseEntity<>(res.toList(), HttpStatus.OK);
+    }
+
+
     @GetMapping("/client/{id}/items")
     public ResponseEntity<Object> getClientItems(@PathVariable("id") Client client) throws IOException {
 
@@ -107,10 +125,10 @@ public class AccountingController {
         System.out.println(json);
 
 
-        for (Order ord : orderRepository.findAll()){
+        for (Order ord : orderRepository.findAll()) {
             if (Objects.equals(ord.getClientId(), client.getClientId())) {
-                for (int i = 0; i< json.length(); i++){
-                    if (Objects.equals(ord.getOrderId(), json.getJSONObject(i).getLong("orderId")))  {
+                for (int i = 0; i < json.length(); i++) {
+                    if (Objects.equals(ord.getOrderId(), json.getJSONObject(i).getLong("orderId"))) {
                         res.put(json.getJSONObject(i));
                     }
                 }
@@ -120,7 +138,6 @@ public class AccountingController {
         System.out.println(res.toString());
         return new ResponseEntity<>(res.toList(), HttpStatus.OK);
     }
-
 
 
 }

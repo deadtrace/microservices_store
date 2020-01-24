@@ -12,6 +12,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -41,6 +42,20 @@ public class CatalogController {
     @GetMapping("/product/{id}")
     public Product getProduct(@PathVariable("id") Product product) {
         return product;
+    }
+
+    @GetMapping("/order/{id}/cost")
+    public Double getOrderCost(@PathVariable("id") Long orderId) throws NoEntityException {
+        Double ans = 0.0;
+        List<Item> items = itemRepository.findAll();
+        for (Item item : items) {
+            if (item.getOrderId().equals(orderId)) {
+                Long productId = item.getProductId();
+                Product product = productRepository.findById(productId).orElseThrow(() -> new NoEntityException(productId));
+                ans += item.getQuantity() * product.getCost();
+            }
+        }
+        return ans;
     }
 
     @PostMapping("/product")
