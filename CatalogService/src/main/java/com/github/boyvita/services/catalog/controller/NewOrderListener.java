@@ -17,7 +17,7 @@ import org.springframework.amqp.core.Message;
 @Service
 @Component
 @ComponentScan(basePackages = "com.github.boyvita.services.catalog")
-public class RabbitMQReceiver {
+public class NewOrderListener {
 
     private final RabbitTemplate amqpTemplateReceiver;
 
@@ -39,5 +39,4 @@ public class RabbitMQReceiver {
     public void receiveMessage(final ItemMessage itemMessage) {
         log.info("Received message as specific class: {}", itemMessage.toString());
     }
-
 }
