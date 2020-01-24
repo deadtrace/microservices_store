@@ -50,7 +50,7 @@ public class CatalogController {
 
     @PutMapping("/product")
     public Product updateProduct(@RequestBody Product product) throws NoEntityException {
-        Long id = product.getId();
+        Long id = product.getProductId();
         Product productFromDb = productRepository.findById(id).orElseThrow(() -> new NoEntityException(id));
         BeanUtils.copyProperties(product, productFromDb, "id");
         return productRepository.save(productFromDb);
@@ -74,16 +74,34 @@ public class CatalogController {
     }
 
     @PostMapping("/item")
-    public Item addItem(@RequestBody Item item) {
-        return itemRepository.save(item);
+    public Item addItem(@RequestBody Item item) throws NoEntityException {
+        Long productId = item.getProductId();
+        Product product = productRepository.findById(productId).orElseThrow(() -> new NoEntityException(productId));
+        if (item.getQuantity() <= product.getQuantity()) {
+            product.setQuantity(product.getQuantity() - item.getQuantity());
+            productRepository.save(product);
+            return itemRepository.save(item);
+        }
+        return null;
     }
 
     @PutMapping("/item")
     public Item updateItem(@RequestBody Item item) throws NoEntityException {
-        Long id = item.getId();
+        Long id = item.getItemId();
         Item itemFromDb = itemRepository.findById(id).orElseThrow(() -> new NoEntityException(id));
-        BeanUtils.copyProperties(item, itemFromDb, "id");
-        return itemRepository.save(itemFromDb);
+        Long diff = item.getQuantity() - itemFromDb.getQuantity();
+        if (!item.getProductId().equals(itemFromDb.getProductId())) {
+            return null;
+        }
+        Long productId = item.getProductId();
+        Product product = productRepository.findById(productId).orElseThrow(() -> new NoEntityException(productId));
+        if (diff <= product.getQuantity()) {
+            product.setQuantity(product.getQuantity() - diff);
+            productRepository.save(product);
+            BeanUtils.copyProperties(item, itemFromDb, "id");
+            return itemRepository.save(itemFromDb);
+        }
+        return null;
 
     }
 

@@ -9,16 +9,15 @@ import java.io.Serializable;
 
 @Entity
 @Table(schema = "catalog", name = "item")
-@ToString(of = {"id"})
-@EqualsAndHashCode(of = {"id"})
+@ToString(of = {"item_id"})
+@EqualsAndHashCode(of = {"item_id"})
 public class Item implements Serializable  {
     @Id
     @Column(name="item_id")
-    @GeneratedValue(strategy=GenerationType.AUTO)
-    private Long id;
+    private Long itemId;
 
     @Column(name="quantity")
-    private Integer itemQuantity;
+    private Long quantity;
 
     @Column(name="order_id")
     private Long orderId;
@@ -26,30 +25,31 @@ public class Item implements Serializable  {
     @Column(name="product_id")
     private Long productId;
 
-    public Item(Long productId, Long orderId) {
-        this.productId = productId;
-	this.orderId = orderId;
-        this.itemQuantity = 1;
-    }
-
     public Item() {
-        this.itemQuantity = 1;
+
     }
 
-    public Long getId() {
-        return id;
+    public Item(Long itemQuantity, Long orderId, Long productId) {
+        this.quantity = itemQuantity;
+        this.orderId = orderId;
+        this.productId = productId;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+
+    public Long getItemId() {
+        return itemId;
     }
 
-    public Integer getItemQuantity() {
-        return itemQuantity;
+    public void setItemId(Long itemId) {
+        this.itemId = itemId;
     }
 
-    public void setItemQuantity(Integer itemQuantity) {
-        this.itemQuantity = itemQuantity;
+    public Long getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(Long quantity) {
+        this.quantity = quantity;
     }
 
     public Long getOrderId() {

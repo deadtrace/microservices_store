@@ -9,13 +9,12 @@ import java.io.Serializable;
 
 @Entity
 @Table(schema = "catalog", name = "product")
-@ToString(of = {"id"})
-@EqualsAndHashCode(of = {"id"})
+@ToString(of = {"product_id"})
+@EqualsAndHashCode(of = {"product_id"})
 public class Product implements Serializable {
     @Id
     @Column(name="product_id")
-    @GeneratedValue(strategy=GenerationType.SEQUENCE)
-    private Long id;
+    private Long productId;
 
     @Column(name = "name")
     private String name;
@@ -27,7 +26,26 @@ public class Product implements Serializable {
     private String description;
 
     @Column(name = "quantity")
-    private Integer quantity;
+    private Long quantity;
+
+    public Product() {
+    }
+
+    public Product(String name, Double cost, String description, Long quantity) {
+        this.name = name;
+        this.cost = cost;
+        this.description = description;
+        this.quantity = quantity;
+    }
+
+
+    public Long getProductId() {
+        return productId;
+    }
+
+    public void setProductId(Long productId) {
+        this.productId = productId;
+    }
 
     public String getDescription() {
         return description;
@@ -35,28 +53,6 @@ public class Product implements Serializable {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public void setQuantity(Integer quantity) {
-        this.quantity = quantity;
-    }
-
-    public Product(String name, Double cost, String description, Integer quantity) {
-        this.name = name;
-        this.cost = cost;
-        this.description = description;
-	this.quantity = quantity;
-    }
-
-    public Product() {
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getName() {
@@ -75,11 +71,16 @@ public class Product implements Serializable {
         this.cost = cost;
     }
 
-    public Integer getQuantity() {
-    	return quantity;
+    public Long getQuantity() {
+        return quantity;
     }
 
-    public void SetQuantity(Integer quantity) {
+    public void setQuantity(Long quantity) {
+        this.quantity = quantity;
+    }
+
+
+    public void SetQuantity(Long quantity) {
     	this.quantity = quantity;
     }
 }

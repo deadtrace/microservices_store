@@ -6,7 +6,6 @@ import com.github.boyvita.services.accounting.model.Order;
 import com.github.boyvita.services.accounting.repo.ClientRepository;
 import com.github.boyvita.services.accounting.repo.OrderRepository;
 import org.json.JSONArray;
-import org.json.JSONObject;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
@@ -18,10 +17,6 @@ import org.springframework.web.bind.annotation.*;
 
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.nio.charset.Charset;
 import java.util.*;
 
 import static com.github.boyvita.services.accounting.util.JsonReader.readJsonArrayFromUrl;
@@ -46,15 +41,6 @@ public class AccountingController {
         this.clientRepository = clientRepository;
     }
 
-    @GetMapping("/start")
-    public void start() {
-        Client client = new Client("Kolyan");
-        clientRepository.save(client);
-
-        Order order = new Order(client);
-        orderRepository.save(order);
-    }
-
 
     @GetMapping("/order")
     public List<Order> listOrder() {
@@ -73,7 +59,7 @@ public class AccountingController {
 
     @PutMapping("/order")
     public Order updateOrder(@RequestBody Order order) throws NoEntityException {
-        Long id = order.getId();
+        Long id = order.getOrderId();
         Order orderFromDb = orderRepository.findById(id).orElseThrow(() -> new NoEntityException(id));
         BeanUtils.copyProperties(order, orderFromDb, "id");
         return orderRepository.save(orderFromDb);
@@ -97,7 +83,7 @@ public class AccountingController {
 
     @PutMapping("/client")
     public Client updateClient(@RequestBody Client client) throws NoEntityException {
-        Long id = client.getId();
+        Long id = client.getClientId();
         Client clientFromDb = clientRepository.findById(id).orElseThrow(() -> new NoEntityException(id));
         BeanUtils.copyProperties(client, clientFromDb, "id");
         return clientRepository.save(clientFromDb);
@@ -122,9 +108,9 @@ public class AccountingController {
 
 
         for (Order ord : orderRepository.findAll()){
-            if (Objects.equals(ord.getClient().getId(), client.getId())) {
+            if (Objects.equals(ord.getClientId(), client.getClientId())) {
                 for (int i = 0; i< json.length(); i++){
-                    if (Objects.equals(ord.getId(), json.getJSONObject(i).getLong("orderId")))  {
+                    if (Objects.equals(ord.getOrderId(), json.getJSONObject(i).getLong("orderId")))  {
                         res.put(json.getJSONObject(i));
                     }
                 }

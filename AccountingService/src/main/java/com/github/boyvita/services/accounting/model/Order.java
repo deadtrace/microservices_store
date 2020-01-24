@@ -9,36 +9,27 @@ import java.io.Serializable;
 
 @Entity
 @Table(schema = "accounting", name = "order")
-@ToString(of = {"id"})
-@EqualsAndHashCode(of = {"id"})
+@ToString(of = {"order_id"})
+@EqualsAndHashCode(of = {"order_id"})
 public class Order implements Serializable {
     @Id
     @Column(name="order_id")
-    @GeneratedValue(strategy=GenerationType.SEQUENCE)
-    private Long id;
+    private Long orderId;
 
     @Enumerated(EnumType.ORDINAL)
     private OrderStatus orderStatus;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "client_id", nullable=false)
-    private Client client;
+    @Column(name = "client_id")
+    private Long clientId;
 
-    public Order(Client client) {
-        this.client = client;
+    public Order(Long clientId) {
+        this.clientId = clientId;
         this.orderStatus = OrderStatus.COLLECTING;
     }
 
     public Order() {
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public OrderStatus getOrderStatus() {
         return orderStatus;
@@ -48,11 +39,19 @@ public class Order implements Serializable {
         this.orderStatus = orderStatus;
     }
 
-    public Client getClient() {
-        return client;
+    public Long getOrderId() {
+        return orderId;
     }
 
-    public void setClient(Client client) {
-        this.client = client;
+    public void setOrderId(Long orderId) {
+        this.orderId = orderId;
+    }
+
+    public Long getClientId() {
+        return clientId;
+    }
+
+    public void setClientId(Long clientId) {
+        this.clientId = clientId;
     }
 }

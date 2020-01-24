@@ -1,12 +1,5 @@
 package com.github.boyvita.services.catalog.controller;
 
-import com.github.boyvita.services.catalog.model.ItemMessage;
-import com.github.boyvita.services.catalog.repo.ItemRepository;
-import com.github.boyvita.services.catalog.repo.ProductRepository; 
-import org.springframework.amqp.rabbit.annotation.RabbitListener;
-import org.springframework.amqp.rabbit.core.RabbitTemplate;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
